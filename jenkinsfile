@@ -4,54 +4,23 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from GitHub
-                git branch: 'main', url: 'git@github.com:Asadmahmand/test1.git'
+                git 'https://github.com/your-repo/your-project.git'
             }
         }
-
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    // If you need to install any dependencies or run any build steps, you can add them here
-                    // For an HTML project, there might not be a build step, so this stage can be empty or used for linting
-                    echo 'No build steps for a static HTML project'
+                    docker.build('your-image-name')
                 }
             }
         }
-
-        stage('Test') {
+        stage('Run Docker Container') {
             steps {
                 script {
-                    // If you have any tests to run, add them here
-                    // For an HTML project, this might involve running some kind of HTML validation or link checking
-                    echo 'No tests for a static HTML project'
+                    def app = docker.image('your-image-name')
+                    app.run('-p 80:80')
                 }
             }
-        }
-
-        stage('Deploy') {
-            steps {
-                script {
-                    // Deploy steps can vary depending on your environment
-                    // You might copy files to a web server, upload to S3, etc.
-                    echo 'Deploying the HTML files'
-                    // Example: sh 'scp -r * user@yourserver:/var/www/html/'
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-            // Perform clean-up steps, send notifications, etc.
-            echo 'Cleaning up workspace'
-            cleanWs()
-        }
-        success {
-            echo 'Pipeline completed successfully'
-        }
-        failure {
-            echo 'Pipeline failed'
         }
     }
 }
