@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     def app = docker.image('python5')
-                    app.run('-p 80:80')
+                    app.run('-p 86:80')
                 }
             }
         }
